@@ -1,0 +1,162 @@
+{
+  "datasets": [
+    {
+      "name": "c11487ed",
+      "displayName": "Silver And Gold Eighteen Karat Dataset",
+      "queryLines": [
+        "select avg(price), date(timestamp) as data\r\n",
+        "from default.silver_gold_18k\r\n",
+        "group by data\r\n",
+        "order by data desc"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "4cbfedb6",
+      "displayName": "Gold_Linage",
+      "layout": [
+        {
+          "widget": {
+            "name": "4f1992ab",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c11487ed",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "avg(price)",
+                      "expression": "`avg(price)`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Linha do Tempo do Ouro",
+                "showTitle": true,
+                "showDescription": false
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "data",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(price)",
+                  "displayName": "Média do Valor",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 8,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "1fecac67",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c11487ed",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "avg(avg(price))",
+                      "expression": "AVG(`avg(price)`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Lista de Valores do Ouro",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "data",
+                    "displayName": "Data"
+                  },
+                  {
+                    "fieldName": "avg(avg(price))",
+                    "displayName": "Média do Valor"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 7
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "9c51ee9d",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "548cc487",
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {},
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
