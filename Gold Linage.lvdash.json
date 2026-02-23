@@ -4,7 +4,7 @@
       "name": "c11487ed",
       "displayName": "Silver And Gold Eighteen Karat Dataset",
       "queryLines": [
-        "select avg(price), date(timestamp) as data\r\n",
+        "select avg(price), date as data\r\n",
         "from default.silver_gold_18k\r\n",
         "group by data\r\n",
         "order by data desc"
@@ -65,7 +65,7 @@
           },
           "position": {
             "x": 0,
-            "y": 0,
+            "y": 1,
             "width": 8,
             "height": 7
           }
@@ -98,17 +98,195 @@
                 "title": "Lista de Valores do Ouro",
                 "showTitle": true
               },
-              "rowsPerPage": 25,
               "widgetType": "table",
               "encodings": {
                 "columns": [
                   {
                     "fieldName": "data",
+                    "contentAlignment": "left",
+                    "format": {
+                      "type": "date",
+                      "date": "year-week",
+                      "leadingZeros": true
+                    },
                     "displayName": "Data"
                   },
                   {
                     "fieldName": "avg(avg(price))",
+                    "contentAlignment": "left",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "BRL",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 2
+                      },
+                      "hideGroupSeparator": true
+                    },
                     "displayName": "Média do Valor"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 1,
+            "width": 4,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "mes",
+            "queries": [
+              {
+                "name": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_monthly(data)",
+                "query": {
+                  "datasetName": "c11487ed",
+                  "fields": [
+                    {
+                      "name": "monthly(data)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `data`)"
+                    },
+                    {
+                      "name": "monthly(data)_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Mês"
+              },
+              "selection": {
+                "defaultSelection": {
+                  "operator": {
+                    "operator": "AND",
+                    "args": []
+                  }
+                }
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "monthly(data)",
+                    "queryName": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_monthly(data)"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "data",
+            "queries": [
+              {
+                "name": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_data",
+                "query": {
+                  "datasetName": "c11487ed",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "data_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Data(Range)"
+              },
+              "selection": {
+                "defaultSelection": {
+                  "operator": {
+                    "operator": "AND",
+                    "args": []
+                  }
+                }
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "data",
+                    "queryName": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_data"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "anos",
+            "queries": [
+              {
+                "name": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_yearly(data)",
+                "query": {
+                  "datasetName": "c11487ed",
+                  "fields": [
+                    {
+                      "name": "yearly(data)",
+                      "expression": "DATE_TRUNC(\"YEAR\", `data`)"
+                    },
+                    {
+                      "name": "yearly(data)_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "selection": {
+                "defaultSelection": {
+                  "operator": {
+                    "operator": "AND",
+                    "args": []
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Anos"
+              },
+              "widgetType": "filter-date-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "yearly(data)",
+                    "queryName": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_yearly(data)"
                   }
                 ]
               }
@@ -118,7 +296,7 @@
             "x": 8,
             "y": 0,
             "width": 4,
-            "height": 7
+            "height": 1
           }
         }
       ],
