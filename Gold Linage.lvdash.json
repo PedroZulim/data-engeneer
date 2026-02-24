@@ -1,13 +1,25 @@
 {
   "datasets": [
     {
-      "name": "c11487ed",
-      "displayName": "Silver And Gold Eighteen Karat Dataset",
+      "name": "b618579b",
+      "displayName": "forecast_monthly_prediction",
       "queryLines": [
-        "select avg(price), date as data\r\n",
-        "from default.silver_gold_18k\r\n",
-        "group by data\r\n",
-        "order by data desc"
+        "SELECT \r\n",
+        "    cast(ds as date) as ds, \r\n",
+        "    yhat, \r\n",
+        "    yhat_lower, \r\n",
+        "    yhat_upper\r\n",
+        "FROM workspace.default.forecast_monthly_prediction"
+      ]
+    },
+    {
+      "name": "b7359ba8",
+      "displayName": "silver_gold_18k",
+      "queryLines": [
+        "SELECT \r\n",
+        "    price,\r\n",
+        "    date\r\n",
+        "FROM workspace.default.silver_gold_18k"
       ]
     }
   ],
@@ -18,20 +30,101 @@
       "layout": [
         {
           "widget": {
-            "name": "4f1992ab",
+            "name": "4e544e7d",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "c11487ed",
+                  "datasetName": "b7359ba8",
                   "fields": [
                     {
-                      "name": "data",
-                      "expression": "`data`"
+                      "name": "daily(date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `date`)"
                     },
                     {
                       "name": "avg(price)",
-                      "expression": "`avg(price)`"
+                      "expression": "AVG(`price`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "IN_RANGE(`date`, PARSE_RELATIVE_DATE('now-30d/d', 'FLOOR'), PARSE_RELATIVE_DATE('now/d', 'CEIL'))"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(date)",
+                  "format": {
+                    "type": "date",
+                    "date": "year-month-day"
+                  },
+                  "displayName": "Data",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(price)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "axis": {
+                    "title": "Value"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "dd85e9fd",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b618579b",
+                  "fields": [
+                    {
+                      "name": "ds",
+                      "expression": "`ds`"
+                    },
+                    {
+                      "name": "yhat",
+                      "expression": "`yhat`"
+                    },
+                    {
+                      "name": "yhat_upper",
+                      "expression": "`yhat_upper`"
+                    },
+                    {
+                      "name": "yhat_lower",
+                      "expression": "`yhat_lower`"
                     }
                   ],
                   "disaggregated": true
@@ -39,123 +132,89 @@
               }
             ],
             "spec": {
-              "version": 3,
-              "frame": {
-                "title": "Linha do Tempo do Ouro",
-                "showTitle": true,
-                "showDescription": false
-              },
-              "widgetType": "line",
+              "version": 1,
+              "widgetType": "forecast-line",
               "encodings": {
                 "x": {
-                  "fieldName": "data",
+                  "fieldName": "ds",
+                  "format": {
+                    "type": "date",
+                    "date": "year-month-day"
+                  },
+                  "displayName": "Data",
                   "scale": {
                     "type": "temporal"
                   }
                 },
                 "y": {
-                  "fieldName": "avg(price)",
-                  "displayName": "Média do Valor",
+                  "prediction": {
+                    "fieldName": "yhat",
+                    "displayName": "Prediction"
+                  },
                   "scale": {
                     "type": "quantitative"
+                  },
+                  "predictionUpper": {
+                    "fieldName": "yhat_upper",
+                    "displayName": "Max Predictin"
+                  },
+                  "predictionLower": {
+                    "fieldName": "yhat_lower",
+                    "displayName": "Lower Prediction"
+                  },
+                  "axis": {
+                    "title": "Predictions"
+                  },
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
                   }
                 }
               }
             }
           },
           "position": {
-            "x": 0,
-            "y": 1,
-            "width": 8,
-            "height": 7
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 6
           }
         },
         {
           "widget": {
-            "name": "1fecac67",
+            "name": "valor-do-ouro",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "c11487ed",
+                  "datasetName": "b7359ba8",
                   "fields": [
                     {
-                      "name": "data",
-                      "expression": "`data`"
+                      "name": "daily(date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `date`)"
                     },
                     {
-                      "name": "avg(avg(price))",
-                      "expression": "AVG(`avg(price)`)"
+                      "name": "avg(price)",
+                      "expression": "AVG(`price`)"
                     }
                   ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "title": "Lista de Valores do Ouro",
-                "showTitle": true
-              },
-              "widgetType": "table",
-              "encodings": {
-                "columns": [
-                  {
-                    "fieldName": "data",
-                    "contentAlignment": "left",
-                    "format": {
-                      "type": "date",
-                      "date": "year-week",
-                      "leadingZeros": true
-                    },
-                    "displayName": "Data"
-                  },
-                  {
-                    "fieldName": "avg(avg(price))",
-                    "contentAlignment": "left",
-                    "format": {
-                      "type": "number-currency",
-                      "currencyCode": "BRL",
-                      "abbreviation": "none",
-                      "decimalPlaces": {
-                        "type": "exact",
-                        "places": 2
-                      },
-                      "hideGroupSeparator": true
-                    },
-                    "displayName": "Média do Valor"
-                  }
-                ]
-              }
-            }
-          },
-          "position": {
-            "x": 8,
-            "y": 1,
-            "width": 4,
-            "height": 7
-          }
-        },
-        {
-          "widget": {
-            "name": "mes",
-            "queries": [
-              {
-                "name": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_monthly(data)",
-                "query": {
-                  "datasetName": "c11487ed",
-                  "fields": [
+                  "filters": [
                     {
-                      "name": "monthly(data)",
-                      "expression": "DATE_TRUNC(\"MONTH\", `data`)"
-                    },
-                    {
-                      "name": "monthly(data)_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                      "expression": "`date` <=> PARSE_RELATIVE_DATE('now/d', 'FLOOR')"
                     }
                   ],
-                  "disaggregated": false
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "DATE_TRUNC(\"DAY\", `date`)"
+                    }
+                  ]
                 }
               }
             ],
@@ -163,140 +222,81 @@
               "version": 2,
               "frame": {
                 "showTitle": true,
-                "title": "Mês"
+                "title": "Valor do ouro"
               },
-              "selection": {
-                "defaultSelection": {
-                  "operator": {
-                    "operator": "AND",
-                    "args": []
-                  }
-                }
-              },
-              "widgetType": "filter-date-range-picker",
+              "widgetType": "counter",
               "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "monthly(data)",
-                    "queryName": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_monthly(data)"
-                  }
-                ]
-              }
-            }
-          },
-          "position": {
-            "x": 4,
-            "y": 0,
-            "width": 4,
-            "height": 1
-          }
-        },
-        {
-          "widget": {
-            "name": "data",
-            "queries": [
-              {
-                "name": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_data",
-                "query": {
-                  "datasetName": "c11487ed",
-                  "fields": [
-                    {
-                      "name": "data",
-                      "expression": "`data`"
-                    },
-                    {
-                      "name": "data_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
+                "value": {
+                  "fieldName": "avg(price)"
+                },
+                "period": {
+                  "fieldName": "daily(date)"
                 }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "showTitle": true,
-                "title": "Data(Range)"
-              },
-              "selection": {
-                "defaultSelection": {
-                  "operator": {
-                    "operator": "AND",
-                    "args": []
-                  }
-                }
-              },
-              "widgetType": "filter-date-range-picker",
-              "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "data",
-                    "queryName": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_data"
-                  }
-                ]
               }
             }
           },
           "position": {
             "x": 0,
-            "y": 0,
-            "width": 4,
-            "height": 1
+            "y": 6,
+            "width": 6,
+            "height": 2
           }
         },
         {
           "widget": {
-            "name": "anos",
+            "name": "previsao-do-ouro",
             "queries": [
               {
-                "name": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_yearly(data)",
+                "name": "main_query",
                 "query": {
-                  "datasetName": "c11487ed",
+                  "datasetName": "b618579b",
                   "fields": [
                     {
-                      "name": "yearly(data)",
-                      "expression": "DATE_TRUNC(\"YEAR\", `data`)"
+                      "name": "daily(ds)",
+                      "expression": "DATE_TRUNC(\"DAY\", `ds`)"
                     },
                     {
-                      "name": "yearly(data)_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                      "name": "avg(yhat)",
+                      "expression": "AVG(`yhat`)"
                     }
                   ],
-                  "disaggregated": false
+                  "filters": [
+                    {
+                      "expression": "`ds` <=> DATE'2026-02-25T00:00:00.000'"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "DATE_TRUNC(\"DAY\", `ds`)"
+                    }
+                  ]
                 }
               }
             ],
             "spec": {
               "version": 2,
-              "selection": {
-                "defaultSelection": {
-                  "operator": {
-                    "operator": "AND",
-                    "args": []
-                  }
-                }
-              },
               "frame": {
                 "showTitle": true,
-                "title": "Anos"
+                "title": "Previsão do ouro"
               },
-              "widgetType": "filter-date-picker",
+              "widgetType": "counter",
               "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "yearly(data)",
-                    "queryName": "dashboards/01f10f50e81e13e9a2c218ec13e3086f/datasets/01f10f50f8721d46af547329d664e061_yearly(data)"
-                  }
-                ]
+                "value": {
+                  "fieldName": "avg(yhat)"
+                },
+                "period": {
+                  "fieldName": "daily(ds)"
+                }
               }
             }
           },
           "position": {
-            "x": 8,
-            "y": 0,
-            "width": 4,
-            "height": 1
+            "x": 6,
+            "y": 6,
+            "width": 6,
+            "height": 2
           }
         }
       ],
@@ -306,27 +306,6 @@
     {
       "name": "9c51ee9d",
       "displayName": "Global Filters",
-      "layout": [
-        {
-          "widget": {
-            "name": "548cc487",
-            "spec": {
-              "version": 2,
-              "widgetType": "filter-single-select",
-              "encodings": {},
-              "frame": {
-                "showTitle": true
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 0,
-            "width": 1,
-            "height": 2
-          }
-        }
-      ],
       "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
       "layoutVersion": "GRID_V1"
     }
