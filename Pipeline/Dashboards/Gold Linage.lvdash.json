@@ -21,6 +21,19 @@
         "    date\r\n",
         "FROM workspace.default.silver_gold_18k"
       ]
+    },
+    {
+      "name": "59ea2684",
+      "displayName": "forecast_monthly_prediction_tomorrow",
+      "queryLines": [
+        "SELECT\r\n",
+        "    cast(ds as date) as ds, \r\n",
+        "    yhat, \r\n",
+        "    yhat_lower, \r\n",
+        "    yhat_upper\r\n",
+        "FROM workspace.default.forecast_monthly_prediction\r\n",
+        "WHERE ds = date_add(current_date(), 1)"
+      ]
     }
   ],
   "pages": [
@@ -249,7 +262,7 @@
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "b618579b",
+                  "datasetName": "59ea2684",
                   "fields": [
                     {
                       "name": "daily(ds)",
@@ -258,11 +271,6 @@
                     {
                       "name": "avg(yhat)",
                       "expression": "AVG(`yhat`)"
-                    }
-                  ],
-                  "filters": [
-                    {
-                      "expression": "`ds` <=> DATE'2026-02-25T00:00:00.000'"
                     }
                   ],
                   "disaggregated": false,
