@@ -19,7 +19,8 @@
         "SELECT \r\n",
         "    price,\r\n",
         "    date\r\n",
-        "FROM workspace.default.silver_gold_18k"
+        "FROM workspace.default.silver_gold_18k\r\n",
+        "order by date desc"
       ]
     },
     {
