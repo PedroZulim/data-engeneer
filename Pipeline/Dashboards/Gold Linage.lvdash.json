@@ -16,11 +16,9 @@
       "name": "b7359ba8",
       "displayName": "silver_gold_18k",
       "queryLines": [
-        "SELECT \r\n",
-        "    price,\r\n",
-        "    date\r\n",
+        "SELECT price, cast(date_new as date) as date\r\n",
         "FROM workspace.default.silver_gold_18k\r\n",
-        "order by date desc"
+        "ORDER BY date_new desc"
       ]
     },
     {
